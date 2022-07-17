@@ -18,6 +18,9 @@ public class Position {
 		directReports = new HashSet<Position>();
 	}
 
+	public Position() {
+	}
+
 	public Position(String title, Employee employee) {
 		this(title);
 		if(employee != null)

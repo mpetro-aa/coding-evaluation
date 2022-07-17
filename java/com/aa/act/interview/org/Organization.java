@@ -19,8 +19,30 @@ public abstract class Organization {
 	 * @param title
 	 * @return the newly filled position or empty if no position has that title
 	 */
+
+	
+	public Optional<Position> findCurrentPosition(Position currPosition, String title) {
+		Optional<Position> currHire = Optional.of(currPosition);
+		if (currHire.get().getTitle().equals(title)) {
+			return currHire;
+		} else {
+			for (Position p : currPosition.getDirectReports()) {
+				currHire = findCurrentPosition(p, title);
+				if (currHire.isPresent()) {
+					return currHire;
+				}
+			}
+		}
+		return Optional.empty();
+	}
 	public Optional<Position> hire(Name person, String title) {
-		//your code here
+		Optional<Position> currPosition = findCurrentPosition(root, title);
+		if(currPosition.isPresent()){
+			Position p = currPosition.get();
+			if(!p.isFilled()){
+				currPosition.get().setEmployee(Optional.of(new Employee(person)));
+			}
+		}
 		return Optional.empty();
 	}
 
