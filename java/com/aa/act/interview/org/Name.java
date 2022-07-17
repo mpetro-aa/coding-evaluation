@@ -22,6 +22,15 @@ public class Name {
 		return last;
 	}
 
+	// added setters for first and last
+	public void setFirst(String first) {
+		this.first = first;
+	}
+
+	public void setLast(String last) {
+		this.last = last;
+	}
+
 	@Override
 	public String toString() {
 		return first + " " + last;
