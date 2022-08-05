@@ -45,7 +45,6 @@ public class Position {
 			throw new IllegalArgumentException("position cannot be null");
 		return directReports.add(position);
 	}
-	
 	public boolean removePosition(Position position) {
 		return directReports.remove(position);
 	}

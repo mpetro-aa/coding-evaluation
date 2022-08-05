@@ -6,27 +6,27 @@ public class MyOrganization extends Organization {
 	protected Position createOrganization() {
 		Position ceo = new Position("CEO");
 		Position pres = new Position("President");
-		ceo.addDirectReport(pres);
+		ceo.addDirectReport(pres); //Pres reports to CEO
 		Position vpm = new Position("VP Marketing");
 		pres.addDirectReport(vpm);
 		Position vps = new Position("VP Sales");
 		pres.addDirectReport(vps);
 		Position vpf = new Position("VP Finance");
-		pres.addDirectReport(vpf);
+		pres.addDirectReport(vpf); //All VP report to pres
 		Position coo = new Position("COO");
-		pres.addDirectReport(coo);
+		pres.addDirectReport(coo); //COO report to pres
 		Position cio = new Position("CIO");
-		ceo.addDirectReport(cio);
+		ceo.addDirectReport(cio); //CIO report to CEO
 		Position vpt = new Position("VP Technology");
 		cio.addDirectReport(vpt);
 		Position vpi = new Position("VP Infrastructure");
-		cio.addDirectReport(vpi);
+		cio.addDirectReport(vpi); //VP tech and infra report to CIO
 		Position dea = new Position("Director Enterprise Architecture");
 		vpt.addDirectReport(dea);
 		Position dct = new Position("Director Customer Technology");
-		vpt.addDirectReport(dct);
+		vpt.addDirectReport(dct); //Directors report to vp tech
 		Position s = new Position("Salesperson");
-		vps.addDirectReport(s);
+		vps.addDirectReport(s); //Sales reports to vp of sales
 		
 		return ceo;
 	}
