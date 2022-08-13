@@ -5,6 +5,10 @@ public class Employee {
 	private int identifier;
 	private Name name;
 
+	public Employee(Name name) {
+		this.name = name;
+	}
+
 	public Employee(int identifier, Name name) {
 		if(name == null)
 			throw new IllegalArgumentException("name cannot be null");
