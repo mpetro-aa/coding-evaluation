@@ -25,6 +25,9 @@ public abstract class Organization {
 	 */
 	public Optional<Position> hire(Name person, String title) {
 
+		if (title == null || title.isEmpty())
+			throw new IllegalArgumentException("title cannot be null or empty");
+
 		Queue<Position> posQueue = new LinkedList<>();
 		posQueue.add(root);
 
