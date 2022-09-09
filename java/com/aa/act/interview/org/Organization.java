@@ -1,6 +1,8 @@
 package com.aa.act.interview.org;
 
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
 
 public abstract class Organization {
 
@@ -20,6 +22,19 @@ public abstract class Organization {
 	 * @return the newly filled position or empty if no position has that title
 	 */
 	public Optional<Position> hire(Name person, String title) {
+
+		Queue<Position> posQueue = new LinkedList<>();
+		posQueue.add(root);
+
+		while(!posQueue.isEmpty()) {
+			if(title.equals(posQueue.peek().getTitle())) {
+				Employee e = new Employee(person);
+				Position p = new Position(title, e);
+				return Optional.of(p);
+			}
+			posQueue.addAll(posQueue.poll().getDirectReports());
+		}
+
 		return Optional.empty();
 	}
 
