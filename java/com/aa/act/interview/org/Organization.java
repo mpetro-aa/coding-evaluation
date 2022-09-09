@@ -20,7 +20,6 @@ public abstract class Organization {
 	 * @return the newly filled position or empty if no position has that title
 	 */
 	public Optional<Position> hire(Name person, String title) {
-		//your code here
 		return Optional.empty();
 	}
 
