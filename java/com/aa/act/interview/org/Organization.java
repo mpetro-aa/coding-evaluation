@@ -1,6 +1,8 @@
 package com.aa.act.interview.org;
 
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
 
 public abstract class Organization {
 
@@ -13,13 +15,28 @@ public abstract class Organization {
 	protected abstract Position createOrganization();
 	
 	/**
-	 * hire the given person as an employee in the position that has that title
+	 * Starting at the organization root, this method will perform a BFS for the position with the passed in title.
+	 * If the position is found and not filled, this method will hire an employee with the given name and assign him/her
+	 * to the given position title. Otherwise, an empty Optional<Position> is returned.
 	 * 
-	 * @param person
-	 * @param title
+	 * @param person the person who is being hired
+	 * @param title the title of the position they are meant to fill
 	 * @return the newly filled position or empty if no position has that title
 	 */
 	public Optional<Position> hire(Name person, String title) {
+
+		Queue<Position> posQueue = new LinkedList<>();
+		posQueue.add(root);
+
+		while(!posQueue.isEmpty()) {
+			if(title.equals(posQueue.peek().getTitle())) {
+				Employee e = new Employee(person);
+				posQueue.peek().setEmployee(Optional.of(e));
+				return Optional.of(posQueue.peek());
+			}
+			posQueue.addAll(posQueue.poll().getDirectReports());
+		}
+
 		return Optional.empty();
 	}
 
