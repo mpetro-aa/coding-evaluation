@@ -40,6 +40,10 @@ public abstract class Organization {
 		return Optional.empty();
 	}
 
+	public Position getRoot() {
+		return root;
+	}
+
 	@Override
 	public String toString() {
 		return printOrganization(root, "");

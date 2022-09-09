@@ -1,10 +1,12 @@
 package com.aa.act.interview.org.test;
 
-import com.aa.act.interview.org.MyOrganization;
-import com.aa.act.interview.org.Name;
-import com.aa.act.interview.org.Organization;
+import com.aa.act.interview.org.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedList;
+import java.util.Optional;
+import java.util.Queue;
 
 public class OrganizationTest {
 
@@ -24,13 +26,32 @@ public class OrganizationTest {
         org.hire(new Name("Slick", "Willie"), "Salesperson");
     }
 
+    private boolean searchOrg(Position root, Name name, String title) {
+        Queue<Position> posQueue = new LinkedList<>();
+        posQueue.add(root);
+
+        while(!posQueue.isEmpty()) {
+            Position currPos = posQueue.peek();
+            if(title.equals(currPos.getTitle()) && currPos.isFilled()) {
+                Name empName = currPos.getEmployee().get().getName();
+                return name.getFirst().equals(empName.getFirst()) && name.getLast().equals(empName.getLast());
+            }
+            posQueue.addAll(posQueue.poll().getDirectReports());
+        }
+
+        return false;
+    }
+
     @Test
-    public void hireTest() {
+    public void hireOneTest() {
         //Arrange + Act
-        org.hire(new Name("Doug", "Parker"), "CEO");
+        Name doug = new Name("Doug", "Parker");
+        org.hire(doug, "CEO");
 
         //Assert
-
+        Assertions.assertTrue(searchOrg(org.getRoot(), new Name("Doug", "Parker"), "CEO"));
     }
+
+
 
 }
