@@ -29,8 +29,8 @@ public abstract class Organization {
 		while(!posQueue.isEmpty()) {
 			if(title.equals(posQueue.peek().getTitle())) {
 				Employee e = new Employee(person);
-				Position p = new Position(title, e);
-				return Optional.of(p);
+				posQueue.peek().setEmployee(Optional.of(e));
+				return Optional.of(posQueue.peek());
 			}
 			posQueue.addAll(posQueue.poll().getDirectReports());
 		}
