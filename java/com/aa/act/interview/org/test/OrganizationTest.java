@@ -10,7 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OrganizationTest {
 
     private Organization org = new MyOrganization();
-    
+
+    /**
+     * A utility method used to search within an organization given its root.
+     * @param root root of the organization to be searched
+     * @param name name of the employee to search for
+     * @param title title of the position the given employee should have
+     * @return
+     */
     private boolean searchOrg(Position root, Name name, String title) {
         Queue<Position> posQueue = new LinkedList<>();
         posQueue.add(root);
@@ -27,6 +34,26 @@ public class OrganizationTest {
         return false;
     }
 
+    // ---- Tests ----
+
+    /**
+     * Hires only a single employee and ensures their existance in the organization
+     */
+    @Test
+    public void hireOneTest() {
+        //Arrange
+        Name doug = new Name("Doug", "Parker");
+
+        //Act
+        org.hire(doug, "CEO");
+
+        //Assert
+        Assertions.assertTrue(searchOrg(org.getRoot(), new Name("Doug", "Parker"), "CEO"));
+    }
+
+    /**
+     * Hires many employees and ensures that all employees were successfully hired in their proper positions
+     */
     // ---- Tests ----
     @Test
     public void hireManyTest() {
@@ -75,18 +102,9 @@ public class OrganizationTest {
         nameList.forEach(name -> Assertions.assertTrue(searchOrg(org.getRoot(), name, posList.get(index.getAndIncrement()))));
     }
 
-    @Test
-    public void hireOneTest() {
-        //Arrange
-        Name doug = new Name("Doug", "Parker");
-
-        //Act
-        org.hire(doug, "CEO");
-
-        //Assert
-        Assertions.assertTrue(searchOrg(org.getRoot(), new Name("Doug", "Parker"), "CEO"));
-    }
-
+    /**
+     * Ensures the organization cannot hire an employee given a null name
+     */
     @Test
     public void hireOneNullTest() {
         //Arrange
@@ -99,6 +117,9 @@ public class OrganizationTest {
         Assertions.assertEquals("name cannot be null", exc.getMessage());
     }
 
+    /**
+     * Ensures organization cannot hire employee given a null title
+     */
     @Test
     public void hireTitleIsNullTest() {
         //Arrange
@@ -111,6 +132,9 @@ public class OrganizationTest {
         Assertions.assertEquals("title cannot be null or empty", exc.getMessage());
     }
 
+    /**
+     * Ensures organization cannot hire an employee given an empty string
+     */
     @Test
     public void hireTitleIsEmptyTest() {
         //Arrange
