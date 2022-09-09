@@ -1,18 +1,21 @@
 package com.aa.act.interview.org;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 public class Employee {
 
-	private int identifier;
+	private final static AtomicLong idCounter = new AtomicLong(1);
+	private long identifier;
 	private Name name;
 
-	public Employee(int identifier, Name name) {
+	public Employee(Name name) {
 		if(name == null)
 			throw new IllegalArgumentException("name cannot be null");
-		this.identifier = identifier;
+		this.identifier = idCounter.getAndIncrement();
 		this.name = name;
 	}
 	
-	public int getIdentifier() {
+	public long getIdentifier() {
 		return identifier;
 	}
 	
