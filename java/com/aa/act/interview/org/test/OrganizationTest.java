@@ -1,112 +1,101 @@
 package com.aa.act.interview.org.test;
 
 import com.aa.act.interview.org.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class OrganizationTest {
 
     private Organization org = new MyOrganization();
 
     /**
-     * A utility method used to search within an organization given its root.
-     * @param root root of the organization to be searched
-     * @param name name of the employee to search for
-     * @param title title of the position the given employee should have
-     * @return
+     * Resets the organization after each test to ensure clean testing and no hires from one test appear in another.
      */
-    private boolean searchOrg(Position root, Name name, String title) {
-        Queue<Position> posQueue = new LinkedList<>();
-        posQueue.add(root);
-
-        while(!posQueue.isEmpty()) {
-            Position currPos = posQueue.peek();
-            if(title.equals(currPos.getTitle()) && currPos.isFilled()) {
-                Name empName = currPos.getEmployee().get().getName();
-                return name.getFirst().equals(empName.getFirst()) && name.getLast().equals(empName.getLast());
-            }
-            posQueue.addAll(posQueue.poll().getDirectReports());
-        }
-
-        return false;
+    @AfterEach
+    public void resetOrg() {
+        org = new MyOrganization();
     }
 
     // ---- Tests ----
 
     /**
-     * Hires only a single employee and ensures their existance in the organization
+     * This test ensures that the hire method returns an optional describing the proper return value as well as ensures
+     * that the employee exists within the organization.
      */
     @Test
     public void hireOneTest() {
         //Arrange
         Name doug = new Name("Doug", "Parker");
+        String title = "CEO";
 
         //Act
-        org.hire(doug, "CEO");
+        Optional<Position> pos = org.hire(doug, title);
 
         //Assert
-        Assertions.assertTrue(searchOrg(org.getRoot(), new Name("Doug", "Parker"), "CEO"));
+        Assertions.assertTrue(pos.isPresent()
+                && pos.get().getEmployee().get().getName().getFirst().equals(doug.getFirst())
+                && pos.get().getEmployee().get().getName().getLast().equals(doug.getLast())
+                && pos.get().getTitle().equals(title)
+                && org.isHired(doug));
     }
 
     /**
-     * Hires many employees and ensures that all employees were successfully hired in their proper positions
+     * This test ensures that many people can be hired by an organization, that all return values from the hire method
+     * are on target, and that the people exist within the organization after being hired.
      */
-    // ---- Tests ----
     @Test
     public void hireManyTest() {
         //Arrange
-        List<Name> nameList = new ArrayList<>();
-        nameList.add(new Name("Doug", "Parker"));
-        nameList.add(new Name("Robert", "Isom"));
-        nameList.add(new Name("Gandalf", "Gray"));
-        nameList.add(new Name("Head", "Geek"));
-        nameList.add(new Name("Jane", "Smith"));
-        nameList.add(new Name("Jim", "Jones"));
-        nameList.add(new Name("Bean", "Counter"));
-        nameList.add(new Name("Maya", "Liebman"));
-        nameList.add(new Name("Danielle", "Hoover"));
-        nameList.add(new Name("Scape", "Goat"));
-        nameList.add(new Name("Slick", "Willie"));
-
-        List<String> posList = new ArrayList<>();
-        posList.add("CEO");
-        posList.add("President");
-        posList.add("Director Enterprise Architecture");
-        posList.add("Director Customer Technology");
-        posList.add("VP Marketing");
-        posList.add("VP Sales");
-        posList.add("VP Finance");
-        posList.add("CIO");
-        posList.add("VP Technology");
-        posList.add("VP Infrastructure");
-        posList.add("Salesperson");
+        Name doug = new Name("Doug", "Parker");
+        Name mike = new Name("Mike", "Harrison");
+        Name jake = new Name("Jake", "Berk");
+        Name tom = new Name("Tom", "Barth");
+        Name anthony = new Name("Anthony", "Davis");
 
         //Act
-        org.hire(new Name("Doug", "Parker"), "CEO");
-        org.hire(new Name("Robert", "Isom"), "President");
-        org.hire(new Name("Gandalf", "Gray"), "Director Enterprise Architecture");
-        org.hire(new Name("Head", "Geek"), "Director Customer Technology");
-        org.hire(new Name("Jane", "Smith"), "VP Marketing");
-        org.hire(new Name("Jim", "Jones"), "VP Sales");
-        org.hire(new Name("Bean", "Counter"), "VP Finance");
-        org.hire(new Name("Maya", "Liebman"), "CIO");
-        org.hire(new Name("Danielle", "Hoover"), "VP Technology");
-        org.hire(new Name("Scape", "Goat"), "VP Infrastructure");
-        org.hire(new Name("Slick", "Willie"), "Salesperson");
+        Optional<Position> p1 = org.hire(doug, "CEO");
+        Optional<Position> p2 = org.hire(mike, "VP Marketing");
+        Optional<Position> p3 = org.hire(jake, "VP Sales");
+        Optional<Position> p4 = org.hire(tom, "VP Finance");
+        Optional<Position> p5 = org.hire(anthony, "CIO");
+
+        boolean allPresent = p1.isPresent() && p2.isPresent() && p3.isPresent() && p4.isPresent() && p5.isPresent();
+        boolean allHired = org.isHired(doug) && org.isHired(mike) && org.isHired(jake) && org.isHired(tom) && org.isHired(anthony);
+
+        Assertions.assertTrue(allPresent && allHired);
+    }
+
+    /**
+     * This test ensures the hire method does not override a position that is already filled and returns an optional
+     * describing the already filled position. It additionally ensures that the original employee remains within the
+     * organization while the new employee that was not hired does not.
+     */
+    @Test
+    public void hireWhenAlreadyFilledTest() {
+        //Arrange
+        Name jake = new Name("Jake", "Gall");
+        Name david = new Name("David", "harrison");
+        String title = "CEO";
+
+        //Act
+        org.hire(david, title);
+        Optional<Position> hire = org.hire(jake, title);
 
         //Assert
-        AtomicInteger index = new AtomicInteger();
-        nameList.forEach(name -> Assertions.assertTrue(searchOrg(org.getRoot(), name, posList.get(index.getAndIncrement()))));
+        Assertions.assertTrue(hire.isPresent()
+                        && hire.get().getEmployee().get().getName().getFirst().equals(david.getFirst())
+                        && hire.get().getEmployee().get().getName().getLast().equals(david.getLast())
+                        && org.isHired(david) && !org.isHired(jake));
     }
 
     /**
      * Ensures the organization cannot hire an employee given a null name
      */
     @Test
-    public void hireOneNullTest() {
+    public void hireNameIsNullTest() {
         //Arrange
         Name noName = null;
 

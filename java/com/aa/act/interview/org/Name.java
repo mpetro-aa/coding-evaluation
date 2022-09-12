@@ -1,5 +1,7 @@
 package com.aa.act.interview.org;
 
+import java.util.Objects;
+
 public class Name {
 
 	private String first;
@@ -25,5 +27,10 @@ public class Name {
 	@Override
 	public String toString() {
 		return first + " " + last;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(first, last);
 	}
 }

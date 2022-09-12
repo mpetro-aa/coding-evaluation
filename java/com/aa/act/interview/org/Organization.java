@@ -1,15 +1,18 @@
 package com.aa.act.interview.org;
 
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class Organization {
 
 	private Position root;
+	private final Logger logger;
+	private final HashSet<Name> employeeNameSet = new HashSet<>();
 	
 	public Organization() {
 		root = createOrganization();
+		logger = Logger.getLogger(Organization.class.getName());
 	}
 	
 	protected abstract Position createOrganization();
@@ -17,10 +20,12 @@ public abstract class Organization {
 	/**
 	 * Utilizing {@link #findPosition(String)}, this method searches for a given position within the organization. If the
 	 * position is found and not filled, the given person will be hired and the position will be returned. If the position
-	 * is already filled, it will simply be returned. Finally, if no such position exists, an empty optional will be returned.
+	 * is already filled, it will simply be returned without any new hire taking place.
+	 * Finally, if no such position exists, an empty optional will be returned.
 	 * @param person the person who is being hired
 	 * @param title the title of the position they are meant to fill
-	 * @return the newly filled position or empty if no position has that title
+	 * @return an optional describing the newly filled position, the unchanged position if the position was already filled,
+	 * or an empty optional if no position with the given title is found
 	 */
 	public Optional<Position> hire(Name person, String title) {
 
@@ -32,6 +37,11 @@ public abstract class Organization {
 
 		if(foundPosition.isPresent() && !foundPosition.get().isFilled()) {
 			foundPosition.get().setEmployee(Optional.of(new Employee(person)));
+			employeeNameSet.add(person);
+		} else if(foundPosition.isPresent()) {
+				String msg = "could not hire " + person.getFirst() + " " + person.getLast();
+				logger.log(Level.INFO, msg + ", position " + title + " is already filled by " + foundPosition.get()
+						.getEmployee().get().getName().getFirst());
 		}
 
 		return foundPosition;
@@ -41,8 +51,7 @@ public abstract class Organization {
 	 * Starting at the organization's root, this method will perform a BFS to find the position with the given title.
 	 * If no such position is found, an empty Optional is returned.
 	 * @param title the title of the position being searched for
-	 * @return if a position with the given title exists then an optional describing that position is returned. Otherwise,
-	 * an empty Optional is returned.
+	 * @return an optional describing the position with the given title. Nothing if no such title exists within the organization.
 	 */
 	public Optional<Position> findPosition(String title) {
 		Queue<Position> posQueue = new LinkedList<>();
@@ -56,6 +65,14 @@ public abstract class Organization {
 		}
 
 		return Optional.empty();
+	}
+
+	/**
+	 * @param person the name of the person to look for in the organization
+	 * @return true if the person is hired, false otherwise
+	 */
+	public boolean isHired(Name person) {
+		return employeeNameSet.contains(person);
 	}
 
 	public Position getRoot() {
