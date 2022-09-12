@@ -62,6 +62,7 @@ public class OrganizationTest {
         Optional<Position> p4 = org.hire(tom, "VP Finance");
         Optional<Position> p5 = org.hire(anthony, "CIO");
 
+        //Assert
         boolean allPresent = p1.isPresent() && p2.isPresent() && p3.isPresent() && p4.isPresent() && p5.isPresent();
         boolean allHired = org.isHired(doug) && org.isHired(mike) && org.isHired(jake) && org.isHired(tom) && org.isHired(anthony);
 
@@ -89,6 +90,22 @@ public class OrganizationTest {
                         && hire.get().getEmployee().get().getName().getFirst().equals(david.getFirst())
                         && hire.get().getEmployee().get().getName().getLast().equals(david.getLast())
                         && org.isHired(david) && !org.isHired(jake));
+    }
+
+    /**
+     * This test ensures that hiring for a non-existent position returns an empty optional and does not place the person
+     * in the organization.
+     */
+    @Test
+    public void hireForNonExistentPositionTest() {
+        //Arrange
+        Name doug = new Name("Doug", "Parker");
+
+        //Act
+        Optional<Position> hire = org.hire(doug, "CFO");
+
+        //Assert
+        Assertions.assertTrue(hire.isEmpty() && !org.isHired(doug));
     }
 
     /**
