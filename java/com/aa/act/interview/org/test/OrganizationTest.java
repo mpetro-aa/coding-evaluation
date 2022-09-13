@@ -36,8 +36,7 @@ public class OrganizationTest {
 
         //Assert
         Assertions.assertTrue(pos.isPresent()
-                && pos.get().getEmployee().get().getName().getFirst().equals(doug.getFirst())
-                && pos.get().getEmployee().get().getName().getLast().equals(doug.getLast())
+                && pos.get().getEmployee().get().getName().equals(doug)
                 && pos.get().getTitle().equals(title)
                 && org.isHired(doug));
     }
@@ -87,8 +86,7 @@ public class OrganizationTest {
 
         //Assert
         Assertions.assertTrue(hire.isPresent()
-                        && hire.get().getEmployee().get().getName().getFirst().equals(david.getFirst())
-                        && hire.get().getEmployee().get().getName().getLast().equals(david.getLast())
+                        && hire.get().getEmployee().get().getName().equals(david)
                         && org.isHired(david) && !org.isHired(jake));
     }
 

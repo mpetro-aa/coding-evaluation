@@ -39,9 +39,8 @@ public abstract class Organization {
 			foundPosition.get().setEmployee(Optional.of(new Employee(person)));
 			employeeNameSet.add(person);
 		} else if(foundPosition.isPresent()) {
-				String msg = "could not hire " + person.getFirst() + " " + person.getLast();
-				logger.log(Level.INFO, msg + ", position " + title + " is already filled by " + foundPosition.get()
-						.getEmployee().get().getName().getFirst());
+				logger.log(Level.INFO, "could not hire" + person + "; position " + title + " is already filled by "
+						+ foundPosition.get().getEmployee().get().getName());
 		}
 
 		return foundPosition;
@@ -73,10 +72,6 @@ public abstract class Organization {
 	 */
 	public boolean isHired(Name person) {
 		return employeeNameSet.contains(person);
-	}
-
-	public Position getRoot() {
-		return root;
 	}
 
 	@Override
