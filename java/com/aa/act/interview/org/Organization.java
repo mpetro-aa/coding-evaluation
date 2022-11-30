@@ -6,6 +6,8 @@ public abstract class Organization {
 
 	private Position root;
 	
+	private int identifier = 0;
+	
 	public Organization() {
 		root = createOrganization();
 	}
@@ -21,9 +23,39 @@ public abstract class Organization {
 	 */
 	public Optional<Position> hire(Name person, String title) {
 		//your code here
+		
+		Optional<Employee> employee = Optional.of(new Employee(++identifier, person));
+		
+		Position position = getPositionByTitle(root, title);
+		if (position != null) 
+		{
+			position.setEmployee(employee);
+			return Optional.of(position);
+		}
+	
 		return Optional.empty();
 	}
 
+	public Position getPositionByTitle(Position position, String title) {
+
+		if (position.getTitle().equals(title)) {
+			
+			return position;
+		}
+
+		else {
+			for (Position pos : position.getDirectReports()) {
+
+				Position pos1 = getPositionByTitle(pos, title);
+				if (pos1 != null) 
+					return pos1;
+					
+			}
+		}
+		
+		return null;
+	}
+	
 	@Override
 	public String toString() {
 		return printOrganization(root, "");
