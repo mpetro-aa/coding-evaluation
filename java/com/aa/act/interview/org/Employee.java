@@ -2,6 +2,7 @@ package com.aa.act.interview.org;
 
 public class Employee {
 
+        public static int ID = 1;
 	private int identifier;
 	private Name name;
 
