@@ -55,7 +55,36 @@ public abstract class Organization {
 		
 		return null;
 	}
+	
+	/*
+	 * Finds the largest Identifier number in the given organization and returns it
+	 * 
+	 * @param Position position
+	 * @param int result
+	 * @return an integer primitive relating to the largest Identifier in the organization or 
+	 * 		   the given integer primitive "result" if none are found.
+	 */
+	public int findMaxID(Position position, int result) {
 		
+		// compares the given position's employee's ID, if present, to the integer primitive parameter
+		if (position.getEmployee().isPresent()) {
+				if (position.getEmployee().get().getIdentifier() > result) {
+					result = position.getEmployee().get().getIdentifier();
+				}
+		}
+		
+		// Checks the set of direct reports, if any, recursively and depth first
+		if (!position.getDirectReports().isEmpty()) {
+			for(Position newPosition : position.getDirectReports()) {
+				int newResult = findMaxID(newPosition, result);
+				if (newResult > result) {
+					result = newResult;
+				}
+			}
+		}
+
+		return result;
+	}		
 
 	@Override
 	public String toString() {
