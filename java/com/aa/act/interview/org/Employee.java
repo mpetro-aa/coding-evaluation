@@ -4,6 +4,14 @@ public class Employee {
 
 	private int identifier;
 	private Name name;
+	
+	public Employee(){
+	}
+	public Employee( Name name) {
+		if(name == null)
+			throw new IllegalArgumentException("name cannot be null");
+			this.name = name;
+	}
 
 	public Employee(int identifier, Name name) {
 		if(name == null)
