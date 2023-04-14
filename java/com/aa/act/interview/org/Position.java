@@ -12,6 +12,10 @@ public class Position {
 	private Optional<Employee> employee;
 	private Set<Position> directReports;
 	
+	public Position() { //default 
+	}	
+	
+	
 	public Position(String title) {
 		this.title = title;
 		employee = Optional.empty();
