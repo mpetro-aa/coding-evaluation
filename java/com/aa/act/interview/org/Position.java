@@ -23,7 +23,11 @@ public class Position {
 		if(employee != null)
 			setEmployee(Optional.of(employee));
 	}
-	
+
+	public Position(Set<Position> directReports) {
+		this.directReports = directReports;
+	}
+
 	public String getTitle() {
 		return title;
 	}
