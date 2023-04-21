@@ -10,7 +10,7 @@ namespace MyOrganization
 {
     internal class Position
     {
-        private string title;
+        public string title;
         private Employee? employee;
         private HashSet<Position> directReports;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -27,6 +28,30 @@ namespace MyOrganization
         public Position? Hire(Name person, string title)
         {
             //your code here
+
+            Position current = root;
+
+            Queue<Position> queue = new Queue<Position>();
+
+            queue.Enqueue(current);
+
+            while (queue.Count > 0)
+            {
+                Position cur = queue.Dequeue();
+
+                if (cur.title == title)
+                {
+                    cur.SetEmployee(new Employee(person));
+                    return cur;
+                }
+                else
+                {
+                    foreach (Position pos in cur.GetDirectReports())
+                    {
+                        queue.Enqueue(pos);
+                    }
+                }
+            }
             return null;
         }
 
