@@ -25,6 +25,12 @@ namespace MyOrganization
          * @param title
          * @return the newly filled position or empty if no position has that title
          */
+
+
+        /*
+          APPROACH EXPLANATION : The CreateOrganization is built like a Tree with multiple Levels .
+          One of the Recommended Approaches that is done iteratively is using a Queue by exploring each position and its Direct Reported Positions..
+        */
         public Position? Hire(Name person, string title)
         {
             //your code here
@@ -38,7 +44,7 @@ namespace MyOrganization
             while (queue.Count > 0)
             {
                 Position cur = queue.Dequeue();
-
+                // validate  if the position has the that title
                 if (cur.title == title)
                 {
                     cur.SetEmployee(new Employee(person));
@@ -52,7 +58,9 @@ namespace MyOrganization
                     }
                 }
             }
-            return null;
+            // return empty is no position has title 
+            // different use case..
+            return new Position(string.Empty);
         }
 
         override public string ToString()
