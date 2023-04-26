@@ -19,9 +19,12 @@ public abstract class Organization {
 	 * @param title
 	 * @return the newly filled position or empty if no position has that title
 	 */
-	public Optional<Position> hire(Name person, String title) {
-		//your code here
-		return Optional.empty();
+	public Position hire(Name person, String title) {
+		Position position = new Position(title);
+		Optional<Employee> emp = Optional.of(new Employee(1, person));
+		position.setEmployee(emp);
+		System.out.println(position);
+		return position;
 	}
 
 	@Override
