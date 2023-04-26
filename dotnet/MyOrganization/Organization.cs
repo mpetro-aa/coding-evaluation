@@ -9,10 +9,12 @@ namespace MyOrganization
     internal abstract class Organization
     {
         private Position root;
+        private int employeeNumber;
 
         public Organization()
         {
             root = CreateOrganization();
+            employeeNumber = 0;
         }
 
         protected abstract Position CreateOrganization();
@@ -26,7 +28,37 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            return Hire(person, title, root);
+        }
+
+        private Position? Hire(Name person, string title, Position position)
+        {
+            Position? hiredPosition = null;
+            // check if the current position is the title being hired
+            if(title == position.GetTitle())
+            {
+                Employee emp = new Employee(GetUniqueEmployeeNumber(), person);
+                Position pos = new Position(title, emp);
+                position.SetEmployee(emp);
+                return pos; 
+            }
+
+            // check if the person has reports
+            var reports = position.GetDirectReports();
+
+            if(reports.Count > 0)
+            {
+                // for each report, hire recursively.
+                foreach( var report in reports)
+                {
+                    hiredPosition = Hire(person, title, report);
+                    if(hiredPosition != null)
+                    {
+                        return hiredPosition;
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -43,6 +75,12 @@ namespace MyOrganization
                 sb.Append(PrintOrganization(p, prefix + "\t"));
             }
             return sb.ToString();
+        }
+
+        protected int GetUniqueEmployeeNumber()
+        {
+            employeeNumber += 1;
+            return employeeNumber;
         }
     }
 }
