@@ -9,10 +9,16 @@ namespace MyOrganization
     internal abstract class Organization
     {
         private Position root;
+        private List<Position> positions;
+        private int empid = 0;
 
         public Organization()
         {
             root = CreateOrganization();
+
+            // This saves us from having to walk a hierarchy each time we want to
+            // lookup a position.
+            positions = new List<Position>(root.Flatten());
         }
 
         protected abstract Position CreateOrganization();
@@ -26,7 +32,11 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            var found = positions.First(p => p.GetTitle() == title);
+            if (found != null)
+            {
+                found.SetEmployee(new Employee(++empid, person));
+            }
             return null;
         }
 
