@@ -10,6 +10,8 @@ namespace MyOrganization
     {
         private Position root;
 
+        static int identifier = 1;
+
         public Organization()
         {
             root = CreateOrganization();
@@ -26,8 +28,35 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
-            return null;
+            var p = getPositionhasTitle(root, title);
+            if (p == null)
+                return null;
+
+            var emp = new Employee(identifier++, person);
+            p.SetEmployee(emp);
+            return p;
+        }
+        private Position? getPositionhasTitle(Position p, string title)
+        {
+            Position pos = null;
+            if (p != null)
+            {
+                if (p.GetTitle() == title)
+                    return p;
+                foreach (Position position in p.GetDirectReports())
+                {
+                    if (pos != null)
+                        break;
+                    if (position.GetTitle() == title)
+                    {
+                        pos = position;
+                        break;
+                    }
+
+                    pos = getPositionhasTitle(position, title);
+                }
+            }
+            return pos;
         }
 
         override public string ToString()
