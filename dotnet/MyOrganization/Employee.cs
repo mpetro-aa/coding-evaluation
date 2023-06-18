@@ -12,11 +12,11 @@ namespace MyOrganization
         private int identifier;
         private Name name;
 
-        public Employee(int identifier, Name name)
+        public Employee(Name name, int Identifier)
         {
             if (name == null)
                 throw new Exception("name cannot be null");
-            this.identifier = identifier;
+            this.identifier = Identifier;
             this.name = name;
         }
 
@@ -32,7 +32,7 @@ namespace MyOrganization
 
         override public string ToString()
         {
-            return name.ToString() + ": " + identifier;
+            return name.ToString();
         }
     }
 }
