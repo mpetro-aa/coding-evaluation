@@ -10,7 +10,7 @@ namespace MyOrganization
     internal abstract class Organization
     {
         private Position root;
-
+        private int iden;
         public Organization()
         {
             root = CreateOrganization();
@@ -25,8 +25,6 @@ namespace MyOrganization
          * @param title
          * @return the newly filled position or empty if no position has that title
          */
-
-
         /*
           APPROACH EXPLANATION : The CreateOrganization is built like a Tree with multiple Levels .
           One of the Recommended Approaches that is done iteratively is using a Queue by exploring each position and its Direct Reported Positions..
@@ -34,9 +32,8 @@ namespace MyOrganization
         public Position? Hire(Name person, string title)
         {
             //your code here
-
             Position current = root;
-
+            iden = 0;
             Queue<Position> queue = new Queue<Position>();
 
             queue.Enqueue(current);
@@ -47,11 +44,16 @@ namespace MyOrganization
                 // validate  if the position has the that title
                 if (cur.title == title)
                 {
-                    cur.SetEmployee(new Employee(person));
-                    return cur;
+                    // if not filled...
+                    if(!cur.IsFilled())
+                    {
+                        cur.SetEmployee(new Employee(person,iden++));
+                        return cur;
+                    }
                 }
                 else
                 {
+                    //enqueuing the current position Direct Reports into the Queue for exploration...
                     foreach (Position pos in cur.GetDirectReports())
                     {
                         queue.Enqueue(pos);
