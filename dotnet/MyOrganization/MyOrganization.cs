@@ -33,6 +33,8 @@ namespace MyOrganization
             vpt.AddDirectReport(dct);
             Position s = new Position("Salesperson");
             vps.AddDirectReport(s);
+            Position pm = new Position("Product Manager");
+            vps.AddDirectReport(pm);
 
             return ceo;
         }
@@ -46,6 +48,8 @@ namespace MyOrganization
             org.Hire(new Name("Bill", "Lumbergh"), "Director Customer Technology");
             org.Hire(new Name("Ford", "Prefect"), "VP Marketing");
             org.Hire(new Name("Jane", "Seller"), "VP Sales");
+            org.Hire(new Name("Naren", "Reddy"), "Product Manager");
+            org.Hire(new Name("Vijay", "Virup"), "President");
             org.Hire(new Name("Bean", "Counter"), "VP Finance");
             org.Hire(new Name("Victoria", "Sinclair"), "CIO");
             org.Hire(new Name("Head", "Geek"), "VP Technology");
