@@ -26,10 +26,58 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            Position? targetPosition = FindPositionByTitle(root, title);
+
+            if (targetPosition != null)
+            {
+                if (targetPosition.IsFilled())
+                {
+                    Employee? previousEmployee = targetPosition.GetEmployee();
+                    Console.WriteLine($"Position '{title}' is already filled by {previousEmployee}. Cannot hire {person}.");
+                    return null;
+                }
+
+                Employee newEmployee = new Employee(GetNextEmployeeIdentifier(), person);
+                targetPosition.SetEmployee(newEmployee);
+
+                Console.WriteLine($"Hired {person} as '{title}'.");
+                return targetPosition;
+            }
+
+            Console.WriteLine($"No position found with the title '{title}'. Cannot hire {person}.");
             return null;
         }
 
+        private Position? FindPositionByTitle(Position currentPosition, string title)
+        {
+            if (currentPosition.GetTitle() == title)
+            {
+                return currentPosition;
+            }
+
+            foreach (Position directReport in currentPosition.GetDirectReports())
+            {
+                Position? targetPosition = FindPositionByTitle(directReport, title);
+                if (targetPosition != null)
+                {
+                    return targetPosition;
+                }
+            }
+
+            return null;
+        }
+
+
+
+
+        private int nextEmployeeId = 1000; // Starting employee ID
+
+        private int GetNextEmployeeIdentifier()
+        {
+            int employeeId = nextEmployeeId;
+            nextEmployeeId++; // Increment the employee ID for the next employee
+            return employeeId;
+        }
         override public string ToString()
         {
             return PrintOrganization(root, "");
