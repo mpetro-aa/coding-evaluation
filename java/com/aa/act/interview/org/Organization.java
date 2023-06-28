@@ -36,9 +36,6 @@ public Optional<Position> hire(Name person, String title) {
             position.setEmployee(Optional.of(newEmployee));
             return Optional.of(position);
         }
-
-        
-
         queue.addAll(position.getDirectReports());
     }
 
