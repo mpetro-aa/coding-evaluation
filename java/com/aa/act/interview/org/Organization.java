@@ -37,6 +37,8 @@ public Optional<Position> hire(Name person, String title) {
             return Optional.of(position);
         }
 
+        
+
         queue.addAll(position.getDirectReports());
     }
 
