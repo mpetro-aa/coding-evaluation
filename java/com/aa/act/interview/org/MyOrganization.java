@@ -1,7 +1,6 @@
 package com.aa.act.interview.org;
 
 public class MyOrganization extends Organization {
-
     @Override
     protected Position createOrganization() {
         Position ceo = new Position("CEO");
@@ -27,7 +26,7 @@ public class MyOrganization extends Organization {
         vpt.addDirectReport(dct);
         Position s = new Position("Salesperson");
         vps.addDirectReport(s);
-        
+
         return ceo;
     }
 
@@ -44,6 +43,7 @@ public class MyOrganization extends Organization {
         myOrg.hire(new Name("Head", "Geek"), "VP Technology");
         myOrg.hire(new Name("Steve", "Dent"), "VP Infrastructure");
         myOrg.hire(new Name("Slick", "Willie"), "Salesperson");
+        //System.out.println(myOrg);
         System.out.println(myOrg);
     }
 }

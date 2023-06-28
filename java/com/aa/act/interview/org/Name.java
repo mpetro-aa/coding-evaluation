@@ -4,7 +4,7 @@ public class Name {
 
     private String first;
     private String last;
-    
+
     public Name(String first, String last) {
         if(first == null)
             throw new IllegalArgumentException("first name cannot be null");
@@ -13,11 +13,11 @@ public class Name {
         this.first = first;
         this.last = last;
     }
-    
+
     public String getFirst() {
         return first;
     }
-    
+
     public String getLast() {
         return last;
     }

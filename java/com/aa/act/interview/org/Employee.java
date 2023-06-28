@@ -11,11 +11,11 @@ public class Employee {
         this.identifier = identifier;
         this.name = name;
     }
-    
+
     public int getIdentifier() {
         return identifier;
     }
-    
+
     public Name getName() {
         return name;
     }
