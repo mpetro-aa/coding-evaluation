@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,7 @@ namespace MyOrganization
     internal abstract class Organization
     {
         private Position root;
-
+        int id=0;
         public Organization()
         {
             root = CreateOrganization();
@@ -19,15 +19,35 @@ namespace MyOrganization
 
         /**
          * hire the given person as an employee in the position that has that title
-         * 
+         *
          * @param person
          * @param title
          * @return the newly filled position or empty if no position has that title
          */
-        public Position? Hire(Name person, string title)
+        public Position? Hire(Name person, String title)
         {
-            //your code here
-            return null;
+            addNewEmp(root, person, title);
+            displayEmpDetails(root, person, title);
+            return root;
+        }
+
+        private void addNewEmp(Position position, Name person, String title)
+        {
+            //add new emp/Hire
+            if (position.GetTitle().Equals(title))
+            {
+                position.SetEmployee(new Employee(++id, new Name(person.GetFirst(), person.GetLast())));
+            }
+
+        }
+        private void displayEmpDetails(Position pos, Name person, String title)
+        {
+            //check direct report
+            foreach (Position p in pos.GetDirectReports())
+            {
+                addNewEmp(p, person, title);
+                displayEmpDetails(p, person, title);
+            }
         }
 
         override public string ToString()
