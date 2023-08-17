@@ -10,6 +10,7 @@ namespace MyOrganization
     {
         private Position root;
 
+        private int employeeId = 1;
         public Organization()
         {
             root = CreateOrganization();
@@ -27,9 +28,59 @@ namespace MyOrganization
         public Position? Hire(Name person, string title)
         {
             //your code here
+            //Get employee position based on Title
+            Position? position = GetTitlePosition(title, root);
+            //Check if position is available.
+            if (position == null)
+            {
+                Console.WriteLine("Position is unavailable");
+                return null;
+            }
+
+            if (position != null)
+            {
+                //Check if existing employee
+                if (position.IsFilled())
+                {
+                    Employee? previousEmployee = position.GetEmployee();
+                    Console.WriteLine("Position is already occupied.");
+                    return null;
+                }
+                else
+                {
+                    //Create new hire
+                    Employee newEmployee = new Employee(GetNewId(), person);
+                    position.SetEmployee(newEmployee);
+                    Console.WriteLine("New employee is hired.");
+                    return position;
+                }
+            }
             return null;
         }
 
+        private Position? GetTitlePosition(string title, Position currentPosition)
+        {
+            if (currentPosition.GetTitle() == title)
+            {
+                return currentPosition;
+            }
+
+            foreach (Position pos in currentPosition.GetDirectReports())
+            {
+                Position? position = GetTitlePosition(title, pos);
+                if (position != null)
+                {
+                    return position;
+                }
+            }
+            return null;
+        }
+
+        private int GetNewId()
+        {
+            employeeId++;
+            return employeeId;
+        }
         override public string ToString()
         {
             return PrintOrganization(root, "");
