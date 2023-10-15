@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "strictNullChecks": true,
-    "lib": [ "ES2015", "dom" ]
-  }
-}

@@ -17,6 +17,9 @@ namespace MyOrganization
 
         protected abstract Position CreateOrganization();
 
+        // This is to generate identifier for the Employees
+        int identifier = 1;
+
         /**
          * hire the given person as an employee in the position that has that title
          * 
@@ -26,7 +29,22 @@ namespace MyOrganization
          */
         public Position? Hire(Name person, string title)
         {
-            //your code here
+            Employee employee = new Employee(identifier++, person);
+            return CheckDirectReportPositions(root, employee, title);
+        }
+
+        private Position? CheckDirectReportPositions(Position pos, Employee employee, string title)
+        {
+            if (pos.GetTitle() == title)
+            {
+                pos.SetEmployee(employee);
+                return pos;
+            }
+
+            foreach (Position p in pos.GetDirectReports())
+            {
+                CheckDirectReportPositions(p, employee, title);
+            }
             return null;
         }
 
