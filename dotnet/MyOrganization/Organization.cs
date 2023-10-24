@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +9,7 @@ namespace MyOrganization
     internal abstract class Organization
     {
         private Position root;
+        private int empId = 0;
 
         public Organization()
         {
@@ -27,9 +28,51 @@ namespace MyOrganization
         public Position? Hire(Name person, string title)
         {
             //your code here
+
+            Position? position = GetPosition(title, root);
+
+            if (position != null)
+            {
+                //Checking for availed position
+                if (!position.IsFilled())
+                {
+                    //New hiring
+                    Employee newEmployee = new Employee(GetId(), person);
+                    position.SetEmployee(newEmployee);
+                    return position;
+                }
+            }
             return null;
         }
+        /// <summary>
+        /// To get the position that has the title
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="currentPosition"></param>
+        /// <returns></returns>
+        private Position? GetPosition(string title, Position currentPosition)
+        {
+            if (currentPosition.GetTitle() != title)
+            {
+                foreach (Position? position in from Position pos in currentPosition.GetDirectReports()
+                                               let position = GetPosition(title, pos)
+                                               where position != null
+                                               select position)
+                {
+                    return position;
+                }
 
+                return null;
+            }
+
+            return currentPosition;
+        }
+
+        private int GetId()
+        {
+            empId++;
+            return empId;
+        }
         override public string ToString()
         {
             return PrintOrganization(root, "");
