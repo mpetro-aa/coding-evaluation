@@ -6,10 +6,12 @@ public class Name {
     private String last;
     
     public Name(String first, String last) {
-        if(first == null)
-            throw new IllegalArgumentException("first name cannot be null");
-        if(last == null)
-            throw new IllegalArgumentException("last name cannot be null");
+    	
+    	// adding some extra input validation
+        if(first == null || first.isBlank())
+            throw new IllegalArgumentException("first name cannot be null or empty");
+        if(last == null || first.isBlank())
+            throw new IllegalArgumentException("last name cannot be null or empty");
         this.first = first;
         this.last = last;
     }
