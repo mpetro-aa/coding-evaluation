@@ -1,12 +1,17 @@
 package com.aa.act.interview.org;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Queue;
 
 public abstract class Organization {
 
     private Position root;
+    private int employeeIdentifier;
     
     public Organization() {
+        employeeIdentifier = 0;
         root = createOrganization();
     }
     
@@ -21,7 +26,10 @@ public abstract class Organization {
      */
     public Optional<Position> hire(Name person, String title) {
         //your code here
-        return Optional.empty();
+        Position hiredPosition = bfsGetPositionPerTitle(title);
+        hiredPosition.setEmployee(Optional.of(new Employee(++employeeIdentifier, person)));
+        return Optional.ofNullable(hiredPosition);
+        //return Optional.empty();
     }
 
     @Override
@@ -35,5 +43,27 @@ public abstract class Organization {
             sb.append(printOrganization(p, prefix + "  "));
         }
         return sb.toString();
+    }
+
+    public Position bfsGetPositionPerTitle(String title) {
+        HashSet<Position> visited = new HashSet<>();
+        Queue<Position> adjacent = new LinkedList<>();
+        adjacent.add(root);
+
+        // Loop through all adjacent positions
+        while (!adjacent.isEmpty()) {
+            Position current = adjacent.remove();
+            if (current.getTitle() == title) {
+                return current;
+            }
+            for (Position position : current.getDirectReports()) {
+                if (!visited.contains(position)) {
+                    adjacent.add(position);
+                }
+            }
+            visited.add(current);
+        }
+        throw new IllegalArgumentException("there is no position with this title");
+
     }
 }
